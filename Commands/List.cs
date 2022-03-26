@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Space_galaxies.Models;
 
-namespace Space_galaxies.Models
+namespace Space_galaxies.Commands
 {
     internal class List
     {
@@ -12,18 +11,25 @@ namespace Space_galaxies.Models
         {
             if (listArticle == "galaxies")
             {
-                Console.WriteLine("--- List of all researched galaxies ---");
+                if (galaxies.Count < 1)
+                {
+                    Console.WriteLine("none");
+                }
+                else
+                {
+                    Console.WriteLine("--- List of all researched galaxies ---");
 
-                string listG = string.Join(", ", galaxies.Select(x => x.Name));
-                Console.WriteLine(listG);
+                    string listG = string.Join(", ", galaxies.Select(x => x.Name));
+                    Console.WriteLine(listG);
 
-                Console.WriteLine("--- End of galaxies list ---");
+                    Console.WriteLine("--- End of galaxies list ---");
+                }
             }
             else if (listArticle == "stars")
             {
-                if(galaxies.Count < 1)
+                if(stars.Count < 1)
                 {
-                    Console.WriteLine("There is no existing galaxy!");
+                    Console.WriteLine("none");
                 }
                 else
                 {
@@ -37,9 +43,9 @@ namespace Space_galaxies.Models
             }
             else if (listArticle == "planets")
             {
-                if (stars.Count < 1)
+                if (planets.Count < 1)
                 {
-                    Console.WriteLine("There is no existing star!");
+                    Console.WriteLine("none");
                 }
                 else
                 {
@@ -53,9 +59,9 @@ namespace Space_galaxies.Models
             }
             else
             {
-                if(planets.Count < 1)
+                if(moons.Count < 1)
                 {
-                    Console.WriteLine("There is no existing planet!");
+                    Console.WriteLine("none");
                 }
                 else
                 {

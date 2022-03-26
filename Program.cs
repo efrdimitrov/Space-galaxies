@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static Space_galaxies.Models.List;
-using static Space_galaxies.Models.Print;
+using static Space_galaxies.Commands.List;
+using static Space_galaxies.Commands.Print;
+using static Space_galaxies.Commands.Stats;
 
 namespace Space_galaxies
 {
@@ -14,44 +12,34 @@ namespace Space_galaxies
     {
         static void Main(string[] args)
         {
-        List<Galaxy> galaxies = new List<Galaxy>();
-        List<Star> stars = new List<Star>();
-        List<Planet> planets = new List<Planet>();
-        List<Moon> moons = new List<Moon>();
+            List<Galaxy> galaxies = new List<Galaxy>();
+            List<Star> stars = new List<Star>();
+            List<Planet> planets = new List<Planet>();
+            List<Moon> moons = new List<Moon>();
 
             while (true)
             {
                 string[] input = Console.ReadLine().Split(' ');
-                string strInput = string.Format( string.Join(" ", input));
+                string strInput = string.Format(string.Join(" ", input));
                 string[] article = strInput.Split(new Char[] { '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // exit and stats
                 if (input.Length == 1)
                 {
                     if (input[0].Equals("exit"))
-                    {
                         break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("--- Stats ---");
-                        Console.WriteLine($"Galaxies: {galaxies.Count}");
-                        Console.WriteLine($"Stars: {stars.Count}");
-                        Console.WriteLine($"Planets: {planets.Count}");
-                        Console.WriteLine($"Monns: {moons.Count}");
-                        Console.WriteLine("--- End of tats ---");
-                    }
-                }         
+                    StatsArticle(input[0], galaxies, stars, planets, moons);
+                }
 
                 // list 
                 if (input.Length == 2)
-                {           
+                {
                     string listArticle = input[1];
-                    ListArticle(listArticle, galaxies, stars, planets, moons);                 
+                    ListArticle(listArticle, galaxies, stars, planets, moons);
                 }
 
                 // add
-                if(input[0].Equals("add"))
+                if (input[0].Equals("add"))
                 {
                     if (input[1].Equals("galaxy"))
                     {
@@ -59,11 +47,18 @@ namespace Space_galaxies
                         var type = input[input.Length - 2];
                         var age = input[input.Length - 1];
 
-                        var newGalaxy = new Galaxy(name, type, age);
-                        galaxies.Add(newGalaxy);
+
+                        string[] checkTypeGalaxy = {
+                            "elliptical", "lenticular", "spiral", "irregular"
+                        };
+                        if (checkTypeGalaxy.Contains(type))
+                        {
+                            var newGalaxy = new Galaxy(name, type, age);
+                            galaxies.Add(newGalaxy);
+                        }
                     }
 
-                    else if(input[1].Equals("star"))
+                    else if (input[1].Equals("star"))
                     {
                         string galaxyName = article[1];
                         var name = article[3];
@@ -72,20 +67,18 @@ namespace Space_galaxies
                         bool existGalaxy = false;
                         foreach (var galaxy in galaxies)
                         {
-                            if(galaxyName.Equals(galaxy.Name))
-                            {
+                            if (galaxyName.Equals(galaxy.Name))
                                 existGalaxy = true;
-                            }
                         }
 
-                        if(existGalaxy)
+                        if (existGalaxy)
                         {
                             var newStar = new Star(galaxyName, name, category);
                             stars.Add(newStar);
-                        }                  
-                    }    
-                    
-                    else if(input[1].Equals("planet"))
+                        }
+                    }
+
+                    else if (input[1].Equals("planet"))
                     {
                         string[] lastStr = article[4].Split(' ');
 
@@ -93,22 +86,20 @@ namespace Space_galaxies
                         var name = article[3];
                         var type = lastStr[1];
 
-                        if(lastStr.Length > 3)
-                        {
+                        if (lastStr.Length > 3)
                             type = lastStr[1] + " " + lastStr[2];
-                        }
                         var supportLife = lastStr[lastStr.Length - 1];
 
                         bool existStar = false;
                         foreach (var star in stars)
                         {
-                            if (starName.Equals(star.Name))
-                            {
+                            if (starName.Equals(star.Name))                          
                                 existStar = true;
-                            }
                         }
-
-                        if (existStar)
+                        string[] checkTypePlanet = {
+                            "terrestrial", "giant planet", "ice giant", "mesoplanet", "mini-neptune", "planetar", "super-earth", "super-jupiter", "sub-earth"
+                        };
+                        if (existStar && checkTypePlanet.Contains(type))
                         {
                             var newPlanet = new Planet(starName, name, type, supportLife);
                             planets.Add(newPlanet);
@@ -120,12 +111,10 @@ namespace Space_galaxies
                         var planetName = article[1];
                         var name = article[3];
                         bool existPlanet = false;
-                        foreach(Planet planet in planets)
+                        foreach (Planet planet in planets)
                         {
-                            if(planetName.Equals(planet.Name))
-                            {
+                            if (planetName.Equals(planet.Name))
                                 existPlanet = true;
-                            }
                         }
 
                         if (existPlanet)
@@ -143,6 +132,6 @@ namespace Space_galaxies
                     PrintGalaxy(gName, galaxies, stars, planets, moons);
                 }
             }
-        }         
+        }
     }
 }
