@@ -19,32 +19,41 @@ namespace Space_galaxies.Commands
                     Console.WriteLine("Type: " + g.Type);
                     Console.WriteLine("Age: " + g.Age);
 
+                    string misingArticle = "";
+                    if (stars.Count == 0)
+                        misingArticle = "none";
+                    Console.WriteLine($"Stars: {misingArticle}");
                     foreach (var s in stars)
                     {
                         if (gName.Equals(s.GalaxyName))
                         {
-                            Console.WriteLine("Stars:");
                             Console.WriteLine($"    -    Name: {s.Name}");
                             CalculateClassStar(s.Category);
 
+                            if (planets.Count == 0)
+                                misingArticle = "none";
+                            Console.WriteLine($"         Planets: {misingArticle}");
                             foreach (var p in planets)
                             {
                                 if (s.Name.Equals(p.StarName))
                                 {
-                                    Console.WriteLine("         Planets:");
                                     Console.WriteLine($"             o    Name: {p.Name}");
                                     Console.WriteLine($"                  Type: {p.Type}");
                                     Console.WriteLine($"                  Support life: {p.SupportLife}");
 
+                                    if (moons.Count == 0)
+                                        misingArticle = "none";
+                                    Console.WriteLine($"                  Moons: {misingArticle}");
                                     foreach (var m in moons)
                                     {
                                         if (p.Name.Equals(m.PlanetName))
-                                        {
-                                            Console.WriteLine("                  Moons:");
                                             Console.WriteLine($"                        Name: {m.Name}");
-                                        }
+                                        else
+                                            Console.WriteLine("none");
                                     }
                                 }
+                                else
+                                    Console.WriteLine("none");
                             }
                         }
                     }
