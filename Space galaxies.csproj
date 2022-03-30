@@ -43,14 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Add\AddGalaxy.cs" />
+    <Compile Include="Add\AddMoon.cs" />
+    <Compile Include="Add\AddPlamet.cs" />
+    <Compile Include="Add\AddStar.cs" />
     <Compile Include="Commands\Stats.cs" />
-    <Compile Include="Models\Adding.cs" />
-    <Compile Include="Models\CategoryStar.cs" />
+    <Compile Include="CategoryStar.cs" />
     <Compile Include="Models\Galaxy.cs" />
     <Compile Include="Commands\List.cs" />
     <Compile Include="Models\Moon.cs" />
     <Compile Include="Models\Planet.cs" />
     <Compile Include="Commands\Print.cs" />
+    <Compile Include="Models\SpaceObject.cs" />
     <Compile Include="Models\Star.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

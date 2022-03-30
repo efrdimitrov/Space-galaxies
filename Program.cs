@@ -5,6 +5,10 @@ using System.Linq;
 using static Space_galaxies.Commands.List;
 using static Space_galaxies.Commands.Print;
 using static Space_galaxies.Commands.Stats;
+using static Space_galaxies.Add.AddGalaxy;
+using static Space_galaxies.Add.AddStar;
+using static Space_galaxies.Add.AddPlamet;
+using static Space_galaxies.Add.AddMoon;
 
 namespace Space_galaxies
 {
@@ -32,104 +36,57 @@ namespace Space_galaxies
                 }
 
                 // list 
-                if (input.Length == 2)
+                else if (input.Length == 2)
                 {
                     string listArticle = input[1];
                     ListArticle(listArticle, galaxies, stars, planets, moons);
                 }
 
-                // add
-                if (input[0].Equals("add"))
-                {
-                    if (input[1].Equals("galaxy"))
-                    {
-                        var name = article[1];
-                        var type = input[input.Length - 2];
-                        var age = input[input.Length - 1];
-
-
-                        string[] checkTypeGalaxy = {
-                            "elliptical", "lenticular", "spiral", "irregular"
-                        };
-                        if (checkTypeGalaxy.Contains(type))
-                        {
-                            var newGalaxy = new Galaxy(name, type, age);
-                            galaxies.Add(newGalaxy);
-                        }
-                    }
-
-                    else if (input[1].Equals("star"))
-                    {
-                        string galaxyName = article[1];
-                        var name = article[3];
-                        var category = article[4].Trim();
-
-                        bool existGalaxy = false;
-                        foreach (var galaxy in galaxies)
-                        {
-                            if (galaxyName.Equals(galaxy.Name))
-                                existGalaxy = true;
-                        }
-
-                        if (existGalaxy)
-                        {
-                            var newStar = new Star(galaxyName, name, category);
-                            stars.Add(newStar);
-                        }
-                    }
-
-                    else if (input[1].Equals("planet"))
-                    {
-                        string[] lastStr = article[4].Split(' ');
-
-                        var starName = article[1];
-                        var name = article[3];
-                        var type = lastStr[1];
-
-                        if (lastStr.Length > 3)
-                            type = lastStr[1] + " " + lastStr[2];
-                        var supportLife = lastStr[lastStr.Length - 1];
-
-                        bool existStar = false;
-                        foreach (var star in stars)
-                        {
-                            if (starName.Equals(star.Name))                          
-                                existStar = true;
-                        }
-                        string[] checkTypePlanet = {
-                            "terrestrial", "giant planet", "ice giant", "mesoplanet", "mini-neptune", "planetar", "super-earth", "super-jupiter", "sub-earth"
-                        };
-                        if (existStar && checkTypePlanet.Contains(type))
-                        {
-                            var newPlanet = new Planet(starName, name, type, supportLife);
-                            planets.Add(newPlanet);
-                        }
-                    }
-
-                    else
-                    {
-                        var planetName = article[1];
-                        var name = article[3];
-                        bool existPlanet = false;
-                        foreach (Planet planet in planets)
-                        {
-                            if (planetName.Equals(planet.Name))
-                                existPlanet = true;
-                        }
-
-                        if (existPlanet)
-                        {
-                            var newMoon = new Moon(planetName, name);
-                            moons.Add(newMoon);
-                        }
-                    }
-                }
-
                 //print
-                if (input[0].Equals("print"))
+                else if (input[0].Equals("print"))
                 {
                     string gName = article[1];
                     PrintGalaxy(gName, galaxies, stars, planets, moons);
+                }
+                else
+                {
+                    string inputArt = input[1];
+
+                    if (inputArt == "galaxy")
+                    {
+                        var nameG = article[1];
+                        var typeG = input[input.Length - 2];
+                        var ageG = input[input.Length - 1];
+
+                        AddGalaxyArticle(nameG, typeG, ageG, galaxies);
+                    }
+
+                    if (inputArt == "star")
+                    {
+                        string galaxyName = article[1];
+                        var nameS = article[3];
+                        var categoryS = article[4].Trim();
+
+                        AddStarArticle(galaxyName, nameS, categoryS, galaxies, stars);
+                    }
+
+                    if (inputArt == "planet")
+                    {
+                        string starName = article[1];
+                        string name = article[3];
+                        string type = input[input.Length - 2];
+                        string supportLife = input.LastOrDefault();
+
+                        AddPlanetArticle(starName, name, type, supportLife, stars, planets);
+                    }
+
+                    if (inputArt == "moon")
+                    {
+                        string planetName = article[1];
+                        string name = article[3];
+
+                        AddMoonArticle(planetName, name, planets, moons);
+                    }
                 }
             }
         }
